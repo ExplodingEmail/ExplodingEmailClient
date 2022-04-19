@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExplodingEmail - Temporary Email Service</title>
+    <style>
+        body {
+            background-color: #0D1117;
+            color: #FFFFFF;
+            font-family: "Ubuntu",serif;
+        }
+        
+        a {
+            color: wheat;
+        }
+        
+    </style>
+    <script>
+        
+        class OpCode {
+            static INVALID_TOKEN = 0;                //server -> client
+            static GENERATION_FAILURE = 1;           //server -> client
+            static HERE_IS_YOUR_EMAIL_AND_TOKEN = 2; //server -> client
+            static STATISTICS_REQUEST_RESPONSE = 3;  //server -> client
+            static INVALID_URI = 4;                  //server -> client
+            static RESUME_SUCCESS = 5;               //server -> client
+            static EMAIL_INCOMING = 6;               //server -> client
+            static DELETE_SUCCESS = 7;               //server -> client
+            static DELETE_FAILURE = 8;               //server -> client
+            static INVALID_JSON = 9;                 //server -> client
+            static DELETE_INBOX = 10;                //client -> server
+            static INVALID_OPCODE = 11;              //server -> client
+        }
+        
+        /**
+         * Remove all script, img, and iframe tags from the given string.
+         * @param input {string} The string to remove the tags from.
+         */
+        function stripTags(input) {
+            return input.replace(/<script[^>]*>.*?<\/script>/gi, '')
+                .replace(/<[\/\!]*?[^<>]*?>/gi, '')
+                .replace(/<style[^>]*>.*?<\/style>/gi, '')
+                .replace(/<![\s\S]*?--[ \t\n\r]*>/gi, '')
+                .replace(/<img[^>]*>/gi, '')
+                .replace(/<iframe[^>]*>/gi, '');
+        }
+        
+        const URL_BASE = "wss://gateway.exploding.email";
+        
+        //make a ws connection to /generate
+        //if there is an email and token stored in localStorage, resume the session
+        //otherwise, generate a new email and token
+        
+        let stored_token = localStorage.getItem("token");
+        let stored_email = localStorage.getItem("email");
+        
+        let ws;
+        
+        if(stored_email && stored_token) {
+            ws = new WebSocket(URL_BASE + "/auth/" + stored_token);
+        } else {
+            ws = new WebSocket(URL_BASE + "/generate");
+        }
+        
+        ws.onopen = function() {
+            console.log("Connected to server");
+        };
+        
+        ws.onmessage = function(event) {
+            const content = JSON.parse(event.data);
+            const op = content.op;
+            
+            switch(op) {
+                case OpCode.INVALID_TOKEN: {
+                    //if the token is invalid, clear localStorage and refresh
+                    localStorage.clear();
+                    return window.location.reload();
+                }
+                case OpCode.GENERATION_FAILURE: {
+                    //if the server cannot generate an email, alert the user.
+                    return alert("Failed to generate email (this is a server error, try again later).");
+                }
+                case OpCode.HERE_IS_YOUR_EMAIL_AND_TOKEN: {
+                    //if the server sends an email, store it in localStorage
+                    localStorage.setItem("email", content.email);
+                    localStorage.setItem("token", content.token);
+                    
+                    //set the email in the email field
+                    document.getElementById("email").value = content.email;
+                    
+                    return;
+                }
+                case OpCode.STATISTICS_REQUEST_RESPONSE: {
+                    //if the server sends statistics, set content.statistics.emails_received to the "stats" element
+                    document.getElementById("stats").innerText = content.statistics.emails_received;
+                    document.getElementById("inboxes").innerText = content.statistics.clients;
+                    return;
+                }
+                case OpCode.INVALID_URI: {
+                    //if the server sends an invalid uri, alert the user
+                    return alert("Invalid URI");
+                }
+                case OpCode.RESUME_SUCCESS: {
+                    //if the server sends a success message, set the email input to the one in localStorage
+                    document.getElementById("email").value = localStorage.getItem("email");
+                    return;
+                }
+                case OpCode.EMAIL_INCOMING: {
+                    //if the server sends an email, alert the user
+                    createEmailElement(content.data.from, content.data.subject, content.data.body, content.data.date, content.data.ip);
+                }
+                
+            }
+        };
+        
+        //copy the text from the email input to the clipboard
+        function copy() {
+            const email = document.getElementById("email");
+            email.select();
+            email.setSelectionRange(0, 99999);
+            
+            navigator.clipboard.writeText(email.value);
+            
+            //change the `copy_button` text to a checkmark for 3 seconds
+            const copy_button = document.getElementById("copy_button");
+            copy_button.innerHTML = "✓ Copied!";
+            setTimeout(function() {
+                copy_button.innerHTML = "Copy";
+            }, 3000);
+        }
+        
+        function regenerate() {
+            //delete the old email by sending a message to the socket with OpCode.DELETE_INBOX
+            const token = localStorage.getItem("token");
+            ws.send(JSON.stringify({
+                op: OpCode.DELETE_INBOX,
+                token: token,
+            }));
+            localStorage.clear();
+            window.location.reload();
+            
+        }
+        
+        const ua = navigator.userAgent.toLowerCase();
+        
+        if(ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod") || ua.includes("android")) {
+            document.getElementById("mobile_warning").hidden = false;
+        }
+        
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <style>
+        .buttonable {
+            border: 2px solid #FFFFFF;
+            background-color: #0D1117;
+            text-align: center;
+            font-size: x-large;
+            color: white;
+            border-radius: 10px;
+            padding: 10px;
+            size: A5;
+            cursor: pointer;
+            width: 10vw;
+            margin: 10px;
+        }
+        
+        .buttonable:hover {
+            background-color: #FFFFFF;
+            color: #0D1117;
+        }
+        
+        #emails_container {
+            border-radius: 10px;
+            background-color: wheat;
+            padding: 10px;
+            width: 50vw;
+            margin: auto;
+            align-content: center;
+            color: black;
+        }
+        
+    </style>
+    <style>
+        #topnav {
+            overflow: hidden;
+        }
+        
+        #topnav a {
+            float: left;
+            display: block;
+            color: #f2f2f2;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        
+        #topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        
+        #topnav .icon {
+            display: none;
+        }
+        
+        @media screen and (max-width: 600px) {
+            #topnav a:not(:first-child) {display: none;}
+            #topnav a.icon {
+                float: right;
+                display: block;
+            }
+        }
+        
+        @media screen and (max-width: 600px) {
+            #topnav.responsive {position: relative;}
+            #topnav.responsive .icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            #topnav.responsive a {
+                float: none;
+                display: block;
+                text-align: left;
+            }
+        }
+        
+        #about {
+            background-color: #0D1117;
+            font-size: x-large;
+            color: white;
+            padding: 10px;
+            width: 60vw;
+            margin: auto;
+            align-content: center;
+        }
+    </style>
+    <script>
+        function topnav_resize() {
+            const x = document.getElementById("topnav");
+            x.className = x.className === "" ? "responsive" : "";
+        }
+    </script>
+</head>
+<body>
+<div id="topnav">
+    <a href="/" class="active">Home</a>
+    <!--<a href="/news.html">News</a>-->
+    <a href="/contact.html">Contact</a>
+    <a href="/no-cookies.html">NoCookie</a>
+    <a href="/api.html">API</a>
+    <a href="javascript:void(0);" class="icon" onclick="topnav_resize()">
+        =
+    </a>
+</div>
+<div style="text-align: center; align-content: center">
+    <h1>Exploding Email</h1>
+    <h2 style="margin-bottom: 10vh">Generate disposable email addresses to use on websites!</h2>
+    
+    <p>We've processed <b id="stats">(loading)</b> emails with <b id="inboxes">(loading)</b> inboxes recently!</p>
+    
+    <h1 id="mobile_warning" hidden>Note: while this site <i>might</i> work on mobile devices, it is not designed for it (emails may not go through because
+    of the way websockets work).</h1>
+    
+    <!--curved and dotted box-->
+    <label for="email" style="font-size: x-large">Your disposable email address is:</label><br><br>
+    <input id="email" style="border-radius: 10px; border: 2px dotted #FFFFFF; padding: 10px; background-color: #0D1117; min-width: 25vw; color: white; font-size: x-large; text-align: center; font-family: monospace" readonly>
+    <br><br><br>
+    <!--copy button-->
+    <button id="copy_button" class="buttonable" onclick="copy()">Copy</button>
+    <!--regenerate button-->
+    <button id="regenerate_button" class="buttonable" onclick="regenerate()">Regenerate</button>
+    
+    <!--curved wheat colored box used for containing emails which can be clicked on to reveal the body which will have an email_display appended to it by the js-->
+    <h2 style="margin-top: 5vh;">Emails will show up below</h2>
+    <div id="emails_container" style="min-height: 10vh">
+    </div>
+    <br><br><br><br><br><br><br><br><br><br><br><br>
+    <div id="about">
+        <h2>What is ExplodingEmail?</h2>
+        <p>
+            ExplodingEmail, otherwise known as a disposable email generator, is a website which generates disposable email addresses to use on websites.
+            A lot of websites which require you to sign up for an account to use certain features, require you to use an email address,
+            and some of them require you to verify it.  In a world of spam, low security, and non-privacy, this is a problem.  This website is designed to
+            solve this problem by generating disposable email addresses which can be used on websites without you having to give up your real email address.
+            This is also safer than using an email dedicated for potential spam websites, as you can generate one email per-website, making it so multiple
+            companies cannot build a profile on you based on your email address.  While it might sound difficult to track a user based on an email address,
+            <a href="https://nothingprivate.ml/" rel="noreferrer">it is not only possible</a>, but non-trivial, to track based on elements such as user agents, IP addresses,
+            and other browser features which can easily be used for tracking.<br><br>
+            ExplodingEmail does not keep ANY logs on your emails.  As proof of this, when an email is received on our end and sent to you, it is instantly
+            erased from our servers.  This also means that if you are not on the webpage while you receive an email, it will be erased as well.  In a world
+            where privacy is decaying, every little bit counts to reclaim it.<br><br>
+            Want to check if one of your email addresses has been part of a breach?
+            <a href="https://haveibeenpwned.com/" rel="noreferrer">Have I Been Pwned</a> is a website which checks if an email address has been part of a breach.
+            Using your email address and the password from the pwned website, hackers can try the email/password on other websites if you re-use the same password
+            (this is why using the same password on different websites is a bad idea).  Using ExplodingEmail for websites that you do not want to give your real
+            email to will help prevent this, as that email will not be associated with any other website.
+        </p>
+    </div>
+</div>
+</body>
+<footer style="position: sticky; bottom: 0">
+    <p>We DO NOT use cookies.  <a href="/no-cookies.html">Click to learn more.</a></p>
+</footer>
+<script>
+    /**
+     *Generate an email something like:
+     *         <div class="email">
+     *             <h2>From: [SENDER]</h2>
+     *             <h2>Subject: [SUBJECT]</h2>
+     *             <p>Click to expand</p>
+     *             <div id="">
+     *
+     *             </div>
+     *             <hr>
+     *         </div>
+     */
+    function createEmailElement(sender, subject, body, date, ip) {
+        const email = document.createElement("div");
+        email.className = "email";
+        email.innerHTML = `<h2>From: ${sender}</h2><h2>Subject: ${subject}</h2><p>Click to expand</p><div id="email_display"></div>`;
+        //create a hidden div to hold the body of the email
+        const email_display = document.createElement("div");
+        email_display.id = "email_display";
+        email_display.style.display = "none";
+        email_display.innerHTML = `<h6>Date: ${new Date(date).toISOString()}</h6><h6>IP of email server: ${ip}</h6><p>${stripTags(body)}</p>`;
+        email.onclick = () => {
+            email_display.style.display = "block";
+        };
+        email.appendChild(email_display);
+        const hr = document.createElement("hr");
+        email.appendChild(hr);
+        document.getElementById("emails_container").prepend(email);
+    }
+    
+</script>
+</html>
