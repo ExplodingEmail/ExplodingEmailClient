@@ -63,62 +63,64 @@
         
         let ws;
         
-        if(stored_email && stored_token) {
-            ws = new WebSocket(URL_BASE + "/auth/" + stored_token);
-        } else {
-            ws = new WebSocket(URL_BASE + "/generate");
-        }
-        
-        ws.onopen = function() {
-            console.log("Connected to server");
-        };
-        
-        ws.onmessage = function(event) {
-            const content = JSON.parse(event.data);
-            const op = content.op;
-            
-            switch(op) {
-                case OpCode.INVALID_TOKEN: {
-                    //if the token is invalid, clear localStorage and refresh
-                    localStorage.clear();
-                    return window.location.reload();
-                }
-                case OpCode.GENERATION_FAILURE: {
-                    //if the server cannot generate an email, alert the user.
-                    return alert("Failed to generate email (this is a server error, try again later).");
-                }
-                case OpCode.HERE_IS_YOUR_EMAIL_AND_TOKEN: {
-                    //if the server sends an email, store it in localStorage
-                    localStorage.setItem("email", content.email);
-                    localStorage.setItem("token", content.token);
-                    
-                    //set the email in the email field
-                    document.getElementById("email").value = content.email;
-                    
-                    return;
-                }
-                case OpCode.STATISTICS_REQUEST_RESPONSE: {
-                    //if the server sends statistics, set content.statistics.emails_received to the "stats" element
-                    document.getElementById("stats").innerText = content.statistics.emails_received;
-                    document.getElementById("inboxes").innerText = content.statistics.clients;
-                    return;
-                }
-                case OpCode.INVALID_URI: {
-                    //if the server sends an invalid uri, alert the user
-                    return alert("Invalid URI");
-                }
-                case OpCode.RESUME_SUCCESS: {
-                    //if the server sends a success message, set the email input to the one in localStorage
-                    document.getElementById("email").value = localStorage.getItem("email");
-                    return;
-                }
-                case OpCode.EMAIL_INCOMING: {
-                    //if the server sends an email, alert the user
-                    createEmailElement(content.data.from, content.data.subject, content.data.body, content.data.date, content.data.ip);
-                }
-                
+        setTimeout(() => {
+            if(stored_email && stored_token) {
+                ws = new WebSocket(URL_BASE + "/auth/" + stored_token);
+            } else {
+                ws = new WebSocket(URL_BASE + "/generate");
             }
-        };
+            
+            ws.onopen = function() {
+                console.log("Connected to server");
+            };
+            
+            ws.onmessage = function(event) {
+                const content = JSON.parse(event.data);
+                const op = content.op;
+                
+                switch(op) {
+                    case OpCode.INVALID_TOKEN: {
+                        //if the token is invalid, clear localStorage and refresh
+                        localStorage.clear();
+                        return window.location.reload();
+                    }
+                    case OpCode.GENERATION_FAILURE: {
+                        //if the server cannot generate an email, alert the user.
+                        return alert("Failed to generate email (this is a server error, try again later).");
+                    }
+                    case OpCode.HERE_IS_YOUR_EMAIL_AND_TOKEN: {
+                        //if the server sends an email, store it in localStorage
+                        localStorage.setItem("email", content.email);
+                        localStorage.setItem("token", content.token);
+                        
+                        //set the email in the email field
+                        document.getElementById("email").value = content.email;
+                        
+                        return;
+                    }
+                    case OpCode.STATISTICS_REQUEST_RESPONSE: {
+                        //if the server sends statistics, set content.statistics.emails_received to the "stats" element
+                        document.getElementById("stats").innerText = content.statistics.emails_received;
+                        document.getElementById("inboxes").innerText = content.statistics.clients;
+                        return;
+                    }
+                    case OpCode.INVALID_URI: {
+                        //if the server sends an invalid uri, alert the user
+                        return alert("Invalid URI");
+                    }
+                    case OpCode.RESUME_SUCCESS: {
+                        //if the server sends a success message, set the email input to the one in localStorage
+                        document.getElementById("email").value = localStorage.getItem("email");
+                        return;
+                    }
+                    case OpCode.EMAIL_INCOMING: {
+                        //if the server sends an email, alert the user
+                        createEmailElement(content.data.from, content.data.subject, content.data.body, content.data.date, content.data.ip);
+                    }
+                    
+                }
+            };
+        }, 300);
         
         //copy the text from the email input to the clipboard
         function copy() {
@@ -148,11 +150,13 @@
             
         }
         
-        const ua = navigator.userAgent.toLowerCase();
-        
-        if(ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod") || ua.includes("android")) {
-            document.getElementById("mobile_warning").hidden = false;
-        }
+        setTimeout(() => {
+            const ua = navigator.userAgent.toLowerCase();
+            
+            if(ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod") || ua.includes("android")) {
+                document.getElementById("mobile_warning").hidden = false;
+            }
+        }, 1000);
         
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -261,6 +265,7 @@
     <a href="/contact.html">Contact</a>
     <a href="/no-cookies.html">NoCookie</a>
     <a href="/api.html">API</a>
+    <a href="https://github.com/ExplodingEmail">GitHub</a>
     <a href="javascript:void(0);" class="icon" onclick="topnav_resize()">
         =
     </a>
