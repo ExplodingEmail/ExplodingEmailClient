@@ -5,38 +5,6 @@
     <title>Minimal ExplodingEmail</title>
 </head>
 <body>
-<h1>Minimal version of Exploding Email for TOR and low-bandwidth users.</h1>
-<p>view https://ttqp5vp3ylxrhpnfkehpzsslabaa7qxdur255jxgwmiisshv2wdntkid.onion/ for the official version.</p>
-<p>view https://exploding.email for the full version.</p>
-<p>make sure you have javascript enabled</p>
-<br><br>
-<p>your email:</p>
-<p id="email"></p>
-<p>resume token:</p>
-<p id="resume_token"></p>
-<p>emails will appear below</p>
-<hr>
-<div id="emails">
-    
-</div>
+<h1>moved to <a href="https://ttqp5vp3ylxrhpnfkehpzsslabaa7qxdur255jxgwmiisshv2wdntkid.onion">https://ttqp5vp3ylxrhpnfkehpzsslabaa7qxdur255jxgwmiisshv2wdntkid.onion</a></h1>
 </body>
-<script>
-    const ws = new WebSocket("ws://ttqp5vp3ylxrhpnfkehpzsslabaa7qxdur255jxgwmiisshv2wdntkid.onion/generate");
-    ws.onmessage = (data) => {
-        const json = JSON.parse(data.data);
-        if(json.op === 2) {
-            document.getElementById("email").innerText = json.email;
-            document.getElementById("resume_token").innerText = json.token;
-        } else if(json.op === 6) {
-            //add a new div for the email
-            const div = document.createElement("div");
-            div.innerText = `from ${json.data.from} to ${json.data.to} subject ${json.data.subject} date ${json.data.date} ip ${json.data.ip}`;
-            const p = document.createElement("p");
-            p.innerText = json.data.body;
-            div.appendChild(p);
-            document.getElementById("emails").appendChild(div);
-            document.getElementById("emails").appendChild(document.createElement("hr"));
-        }
-    }
-</script>
 </html>
