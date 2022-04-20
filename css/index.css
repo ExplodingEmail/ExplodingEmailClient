@@ -1,4 +1,21 @@
-@import url('https://fonts.googleapis.com/css?family=Exo:400,700');
+
+body {
+    background-color: #0D1117;
+    color: #FFFFFF;
+    font-family: "Ubuntu",serif;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+a {
+    /*why does no one use wheat?  it's such a great color and distinguishable for links for white on black pages.*/
+    color: wheat;
+}
+
+footer {
+    position: sticky;
+    bottom: 0;
+}
 
 .topnav {
     overflow: hidden;
@@ -23,39 +40,29 @@
     display: none;
 }
 
-@media screen and (max-width: 600px) {
-    .topnav a:not(:first-child) {display: none;}
-    .topnav a.icon {
-        float: right;
-        display: block;
-    }
+.container {
+    text-align: center;
+    align-content: center;
 }
 
-@media screen and (max-width: 600px) {
-    .topnav.responsive .icon {
-        position: absolute;
-        right: 0;
-        top: 0;
-    }
-    .topnav.responsive a {
-        float: none;
-        display: block;
-        text-align: left;
-    }
+.slogan {
+    margin-bottom: 10vh;
 }
 
 .email_label {
     font-size: x-large;
 }
 
-.about {
-    background-color: #0D1117;
-    font-size: x-large;
-    color: white;
+.email {
+    border-radius: 10px;
+    border: 2px dotted #FFFFFF;
     padding: 10px;
-    width: 60vw;
-    margin: auto;
-    align-content: center;
+    background-color: #0D1117;
+    color: white;
+    font-size: x-large;
+    text-align: center;
+    font-family: monospace;
+    width: 450px;
 }
 
 .buttonable {
@@ -76,6 +83,10 @@
     color: #0D1117;
 }
 
+.emails_will_show_up_here {
+    margin-top: 5vh;
+}
+
 .emails_container {
     min-height: 10vh;
     border-radius: 10px;
@@ -87,48 +98,41 @@
     color: black;
 }
 
-.emails_will_show_up_here {
-    margin-top: 5vh;
-}
-
-body {
+.about {
     background-color: #0D1117;
-    color: #FFFFFF;
-    font-family: "Ubuntu",serif;
-    margin-left: 100px;
-    margin-right: 100px;
-}
-
-a {
-    color: wheat;
-}
-
-.container {
-    text-align: center;
+    font-size: x-large;
+    color: white;
+    padding: 10px;
+    width: 60vw;
+    margin: auto;
     align-content: center;
 }
 
-.email {
-    border-radius: 10px;
-    border: 2px dotted #FFFFFF;
-    padding: 10px;
-    background-color: #0D1117;
-    color: white;
-    font-size: x-large;
-    text-align: center;
-    font-family: monospace;
-    width: 450px;
+
+/*topnav mobile*/
+@media screen and (max-width: 600px) {
+    .topnav a:not(:first-child) {display: none;}
+    .topnav a.icon {
+        float: right;
+        display: block;
+    }
 }
 
-.slogan {
-    margin-bottom: 10vh;
+/*topnav mobile*/
+@media screen and (max-width: 600px) {
+    .topnav.responsive .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    .topnav.responsive a {
+        float: none;
+        display: block;
+        text-align: left;
+    }
 }
 
-footer {
-    position: sticky;
-    bottom: 0;
-}
-
+/*general mobile*/
 @media only screen and (max-width: 950px) {
     .buttonable {
         width: 80%;
