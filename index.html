@@ -32,11 +32,7 @@
             static INVALID_URI = 4;                  //server -> client
             static RESUME_SUCCESS = 5;               //server -> client
             static EMAIL_INCOMING = 6;               //server -> client
-            static DELETE_SUCCESS = 7;               //server -> client
-            static DELETE_FAILURE = 8;               //server -> client
-            static INVALID_JSON = 9;                 //server -> client
             static DELETE_INBOX = 10;                //client -> server
-            static INVALID_OPCODE = 11;              //server -> client
         }
         
         /**
@@ -228,7 +224,6 @@
         }
         
         @media screen and (max-width: 600px) {
-            #topnav.responsive {position: relative;}
             #topnav.responsive .icon {
                 position: absolute;
                 right: 0;
@@ -322,19 +317,7 @@
     <p>We DO NOT use cookies.  <a href="/no-cookies.html">Click to learn more.</a></p>
 </footer>
 <script>
-    /**
-     *Generate an email something like:
-     *         <div class="email">
-     *             <h2>From: [SENDER]</h2>
-     *             <h2>Subject: [SUBJECT]</h2>
-     *             <p>Click to expand</p>
-     *             <div id="">
-     *
-     *             </div>
-     *             <hr>
-     *         </div>
-     */
-    function createEmailElement(sender, subject, body, date, ip) {
+    function createEmailElement(sender, subject, body, date) {
         const email = document.createElement("div");
         email.className = "email";
         email.innerHTML = `<h2>From: ${sender}</h2><h2>Subject: ${subject}</h2><p>Click to expand</p><div id="email_display"></div>`;
@@ -342,7 +325,7 @@
         const email_display = document.createElement("div");
         email_display.id = "email_display";
         email_display.style.display = "none";
-        email_display.innerHTML = `<h6>Date: ${new Date(date).toISOString()}</h6><h6>IP of email server: ${ip}</h6><p>${stripTags(body)}</p>`;
+        email_display.innerHTML = `<h5>Date: ${new Date(date).toISOString()}</h5><p>${stripTags(body)}</p>`;
         email.onclick = () => {
             email_display.style.display = "block";
         };
