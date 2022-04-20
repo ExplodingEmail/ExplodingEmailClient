@@ -8,23 +8,22 @@ modification of https://codepen.io/alvarotrigo/pen/GRvYNax
     top: 50vh;
 }
 
-.context h1{
+.context h1 {
     text-align: center;
     color: #fff;
     font-size: 50px;
 }
 
-.area{
+.area {
     width: 80%;
     height: 200vh;
 }
 
-.circles{
-    position: absolute;
+.circles {
     top: 0;
     left: 0;
     width: 80%;
-    height: 100%;
+    height: 80%;
     overflow: hidden;
 }
 
