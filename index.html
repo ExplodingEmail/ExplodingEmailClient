@@ -14,7 +14,7 @@
     
     <meta name="twitter:card" content="summary_large_image">
     
-    <script src="/index_js.js"></script>
+    <script src="/js/index.js"></script>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -22,10 +22,11 @@
     
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     
-    <link rel="stylesheet" href="/index_ss.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/circles.css">
 </head>
 <body>
-<div id="topnav">
+<div class="topnav">
     <a href="/" class="active">Home</a>
     <!--<a href="/news.html">News</a>-->
     <a href="/contact.html">Contact</a>
@@ -37,9 +38,9 @@
         =
     </a>
 </div>
-<div id="container">
+<div class="container">
     <h1>Exploding Email</h1>
-    <h2 style="margin-bottom: 10vh">Generate disposable email addresses to use on websites!</h2>
+    <h2 class="slogan">Generate disposable email addresses to use on websites!</h2>
     
     <p>We've processed <b id="stats">(loading)</b> emails with <b id="inboxes">(loading)</b> active inboxes!</p>
     
@@ -47,8 +48,8 @@
     of the way websockets work).</h1>
     
     <!--curved and dotted box-->
-    <label for="email" style="font-size: x-large">Your disposable email address is:</label><br><br>
-    <input id="email" readonly>
+    <label for="email" class="email_label">Your disposable email address is:</label><br><br>
+    <input id="email" class="email" readonly>
     <br><br><br>
     <!--copy button-->
     <button id="copy_button" class="buttonable" onclick="copy()">Copy</button>
@@ -56,11 +57,10 @@
     <button id="regenerate_button" class="buttonable" onclick="regenerate()">Regenerate</button>
     
     <!--curved wheat colored box used for containing emails which can be clicked on to reveal the body which will have an email_display appended to it by the js-->
-    <h2 style="margin-top: 5vh;">Emails will show up below</h2>
-    <div id="emails_container" style="min-height: 10vh">
-    </div>
+    <h2 class="emails_will_show_up_here">Emails will show up below</h2>
+    <div class="emails_container"></div>
     <br><br><br><br><br><br><br><br><br><br><br><br>
-    <div id="about">
+    <div class="about">
         <h2>What is ExplodingEmail?</h2>
         <p>
             ExplodingEmail, otherwise known as a disposable email generator, is a website which generates disposable email addresses to use on websites.
@@ -70,20 +70,30 @@
             This is also safer than using an email dedicated for potential spam websites, as you can generate one email per-website, making it so multiple
             companies cannot build a profile on you based on your email address.  While it might sound difficult to track a user based on an email address,
             <a href="https://nothingprivate.ml/" rel="noreferrer">it is not only possible</a>, but non-trivial, to track based on elements such as user agents, IP addresses,
-            and other browser features which can easily be used for tracking.<br><br>
+            and other browser features.<br><br>
             ExplodingEmail does not keep ANY logs on your emails.  As proof of this, when an email is received on our end and sent to you, it is instantly
             erased from our servers.  This also means that if you are not on the webpage while you receive an email, it will be erased as well.  In a world
             where privacy is decaying, every little bit counts to reclaim it.<br><br>
             <b>Want to check if one of your email addresses has been part of a breach?</b>
             <a href="https://haveibeenpwned.com/" rel="noreferrer">Have I Been Pwned</a> is a website which checks if an email address has been part of a breach.
-            Using your email address and the password from the pwned website, hackers can try the email/password on other websites if you re-use the same password
+            <br>Using your email/password from the pwned website, hackers can try your credentials on other websites if you re-use the same password
             (this is why using the same password on different websites is a bad idea).  Using ExplodingEmail for websites that you do not want to give your real
-            email to will help prevent this, as that email will not be associated with any other website.
+            email to will help prevent this, as that email will not be associated with any other website.<br><br>
+            Using ExplodingEmail will also prevent sketchy websites from being able to sell your email to spammers.  If an ExplodingEmail email address is
+            sold to spammers, they will be spamming an inbox where no one will read the message.
         </p>
     </div>
 </div>
+
+<div class="area">
+    <ul class="circles">
+        <li></li><li></li><li></li><li></li><li></li>
+        <li></li><li></li><li></li><li></li><li></li>
+    </ul>
+</div>
 </body>
-<footer style="position: sticky; bottom: 0">
+<footer>
     <p>We DO NOT use cookies.  <a href="/no-cookies.html">Click to learn more.</a></p>
+    <br>
 </footer>
 </html>
