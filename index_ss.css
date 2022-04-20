@@ -61,10 +61,9 @@
     color: white;
     border-radius: 10px;
     padding: 10px;
-    size: A5;
     cursor: pointer;
-    width: 10vw;
     margin: 10px;
+    width: 150px;
 }
 
 .buttonable:hover {
@@ -92,3 +91,35 @@ a {
     color: wheat;
 }
 
+#container {
+    text-align: center;
+    align-content: center;
+}
+
+#email {
+    border-radius: 10px;
+    border: 2px dotted #FFFFFF;
+    padding: 10px;
+    background-color: #0D1117;
+    color: white;
+    font-size: x-large;
+    text-align: center;
+    font-family: monospace;
+    width: 450px;
+}
+
+@media only screen and (max-width: 950px) {
+    .buttonable {
+        width: 80%;
+    }
+    
+    #container {
+        flex-flow: column;
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+    
+    #emails {
+    }
+}
