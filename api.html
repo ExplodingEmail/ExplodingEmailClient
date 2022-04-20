@@ -44,13 +44,11 @@
             <li><a href="#opcodes-invalid-json">Invalid JSON</a></li>
             <li><a href="#opcodes-delete-inbox">Delete inbox</a></li>
             <li><a href="#opcodes-invalid-opcode">Invalid opcode</a></li>
+            <li><a href="#opcodes-version">Version identifier</a></li>
         </ol>
     </li>
     <li>
         <a href="#examples">Examples</a>
-        <ol>
-            
-        </ol>
     </li>
 </ul>
 <hr>
@@ -293,6 +291,16 @@
         "error": "No operation specified.",
         "op": 11,
         "terminated": true
+    }
+</pre>
+<h3 id="opcodes-version">12: Version identifier</h3>
+<p>The server will send its version on this OpCode to help identify potential issues with clients.</p>
+<p>The client should refuse connection if it is a major version off.</p>
+<p>Example:</p>
+<pre>
+    {
+        "version": "1.2.0",
+        "op": 12
     }
 </pre>
 <h2 id="examples">Examples</h2>
