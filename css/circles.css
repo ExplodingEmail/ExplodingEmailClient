@@ -114,6 +114,17 @@ modification of https://codepen.io/alvarotrigo/pen/GRvYNax
     animation-duration: 11s;
 }
 
+.circles li:nth-child(11) {
+    left: 10%;
+    width: 25px;
+    height: 25px;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    background: #00000000;
+    border-top: 15px solid rgb(117, 98, 98);
+    animation-delay: 0s;
+    animation-duration: 12s;
+}
 
 
 @keyframes animate {
