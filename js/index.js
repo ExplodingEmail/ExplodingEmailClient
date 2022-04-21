@@ -137,15 +137,16 @@ function topnav_resize() {
 
 function createEmailElement(sender, subject, body, date) {
     const email = document.createElement("div");
-    email.className = "email";
-    email.innerHTML = `<h2>From: ${sender}</h2><h2>Subject: ${subject}</h2><p>Click to expand</p><div id="email_display"></div>`;
+    email.className = "email_entity";
+    email.innerHTML = `<h2>From: ${sender}</h2><h2>Subject: ${subject}</h2><p id=${date}>Click to expand</p><div id="email_display"></div>`;
     //create a hidden div to hold the body of the email
     const email_display = document.createElement("div");
-    email_display.id = "email_display";
+    email_display.className = "email_display";
     email_display.style.display = "none";
-    email_display.innerHTML = `<h5>Date: ${new Date(date).toISOString()}</h5><p>${stripTags(body)}</p>`;
+    email_display.innerHTML = `<h5>Date received: ${new Date(date).toISOString()}</h5><p>${stripTags(body)}</p>`;
     email.onclick = () => {
         email_display.style.display = "block";
+        document.getElementById(String(date)).style.display = "none";
     };
     email.appendChild(email_display);
     const hr = document.createElement("hr");
