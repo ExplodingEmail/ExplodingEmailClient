@@ -98,7 +98,6 @@ setTimeout(() => {
                     content.data.subject,
                     html_mode ? content.data.html : content.data.body,
                     content.data.date,
-                    content.data.ip,
                     content.data.html
                 );
             }
