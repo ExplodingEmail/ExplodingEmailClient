@@ -24,6 +24,7 @@
     
     <link rel="stylesheet" href="/css/index.css">
     <link rel="stylesheet" href="/css/circles.css">
+    <link rel="stylesheet" href="/css/slider.css">
 </head>
 <body>
 <div class="topnav">
@@ -42,6 +43,10 @@
     <h1>Exploding Email</h1>
     <h2 class="slogan">Generate disposable email addresses to use on websites!</h2>
     
+    <noscript>
+        <h1>Please enable JavaScript to use this website</h1>
+    </noscript>
+    
     <p>We've processed <b id="stats">(loading)</b> emails with <b id="inboxes">(loading)</b> active inboxes!</p>
     
     <h1 id="mobile_warning" hidden>Note: while this site <i>might</i> work on mobile devices, it is not designed for it (emails may not go through because
@@ -59,6 +64,12 @@
     
     <!--curved wheat colored box used for containing emails which can be clicked on to reveal the body which will have an email_display appended to it by the js-->
     <h2 class="emails_will_show_up_here">Emails will show up below</h2>
+    <p>HTML mode (<a href="/html-mode.html">may reduce privacy</a>):</p>
+    <label class="switch">
+        <input type="checkbox" id="html_mode" onclick="toggleHTMLMode();">
+        <span class="slider round"></span>
+    </label>
+    <br><br>
     <div class="emails_container" id="emails_container"></div>
     <br><br><br><br><br><br><br><br><br><br><br><br>
     <div class="about">
@@ -72,7 +83,7 @@
             companies cannot build a profile on you based on your email address.  While it might sound difficult to track a user based on an email address,
             <a href="https://nothingprivate.ml/" rel="noreferrer">it is not only possible</a>, but non-trivial, to track based on elements such as user agents, IP addresses,
             and other browser features.<br><br>
-            ExplodingEmail does not keep ANY logs on your emails.  As proof of this, when an email is received on our end and sent to you, it is instantly
+            ExplodingEmail does not keep <b>ANY</b> logs on your emails.  As proof of this, when an email is received on our end and sent to you, it is instantly
             erased from our servers.  This also means that if you are not on the webpage while you receive an email, it will be erased as well.  In a world
             where privacy is decaying, every little bit counts to reclaim it.<br><br>
             <b>Want to check if one of your email addresses has been part of a breach?</b>

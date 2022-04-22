@@ -11,17 +11,21 @@
     <meta property="og:description" content="Generate temporary email addresses to reduce spam!" />
     <meta name="twitter:card" content="summary_large_image">
     <title>ExplodingEmail API</title>
-    <style>
-        h1, h2, h3, h4, h5, h6 {
-            margin-bottom: 3vh;
-        }
-        
-        ol {
-            list-style-type: circle;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
+<div class="topnav">
+    <a href="/" class="active">Home</a>
+    <!--<a href="/news.html">News</a>-->
+    <a href="/contact.html">Contact</a>
+    <a href="/no-cookies.html">NoCookie</a>
+    <a href="/api.html">API</a>
+    <a href="https://github.com/ExplodingEmail">GitHub</a>
+    <a href="https://discord.gg/GHapeHPWVS">Discord</a>
+    <a href="javascript:void(0);" class="icon" onclick="topnav_resize()">
+        =
+    </a>
+</div>
 <h1>ExplodingEmail API</h1>
 <a href="/">Back to home</a>
 <p>Table of contents</p>
@@ -238,7 +242,7 @@
     <li><b>subject</b> is the email subject</li>
     <li><b>body</b> is the body of the email (may be html)</li>
     <li><b>date</b> is the unix timestamp of when the email was sent in milliseconds</li>
-    <li><b>ip</b> is the IP address of the sender (can be used for validation)</li>
+    <li><b>ip</b> is always 127.0.0.1 until further notice.</li>
 </ul>
 <h3 id="opcodes-delete-success">7: Delete Success</h3>
 <p>Received in response to <a href="#opcodes-delete-inbox">10 Delete Inbox</a> that the client sends.</p>

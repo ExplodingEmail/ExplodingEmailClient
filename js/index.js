@@ -10,6 +10,10 @@ class OpCode {
     static DELETE_INBOX = 10;                //client -> server
 }
 
+//html_mode: true to display html, false to display plain text
+//since this could cause potential privacy issues, default to plain text
+let html_mode = false;
+
 /**
  * Remove all script, img, and iframe tags from the given string.
  * @param input {string} The string to remove the tags from.
@@ -86,7 +90,13 @@ setTimeout(() => {
             }
             case OpCode.EMAIL_INCOMING: {
                 //if the server sends an email, alert the user
-                createEmailElement(content.data.from, content.data.subject, content.data.body, content.data.date, content.data.ip);
+                createEmailElement(content.data.from,
+                    content.data.subject,
+                    html_mode ? content.data.html : content.data.body,
+                    content.data.date,
+                    content.data.ip,
+                    content.data.html
+                );
             }
             
         }
@@ -135,7 +145,7 @@ function topnav_resize() {
     x.className = x.className === "" ? "responsive" : "";
 }
 
-function createEmailElement(sender, subject, body, date) {
+function createEmailElement(sender, subject, body, date, html) {
     const email = document.createElement("div");
     email.className = "email_entity";
     email.innerHTML = `<h2>From: ${sender}</h2><h2>Subject: ${subject}</h2><p id=${date}>Click to expand</p><div id="email_display"></div>`;
@@ -143,7 +153,7 @@ function createEmailElement(sender, subject, body, date) {
     const email_display = document.createElement("div");
     email_display.className = "email_display";
     email_display.style.display = "none";
-    email_display.innerHTML = `<h5>Date received: ${new Date(date).toISOString()}</h5><p>${stripTags(body)}</p>`;
+    email_display.innerHTML = `<h5>Date received: ${new Date(date).toISOString()}</h5><p>${stripTags(html_mode ? html : body)}</p>`;
     email.onclick = () => {
         email_display.style.display = "block";
         document.getElementById(String(date)).style.display = "none";
@@ -153,3 +163,11 @@ function createEmailElement(sender, subject, body, date) {
     email.appendChild(hr);
     document.getElementById("emails_container").prepend(email);
 }
+
+function toggleHTMLMode() {
+    html_mode = document.getElementById("html_mode").checked;
+}
+
+setTimeout(() => {
+    document.getElementById("html_mode").checked = html_mode;
+}, 100);
