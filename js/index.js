@@ -42,6 +42,8 @@ let stored_email = localStorage.getItem("email");
 
 let ws;
 
+let expiration_time = "(loading)";
+
 setTimeout(() => {
     if(stored_email && stored_token) {
         ws = new WebSocket(URL_BASE + "/auth/" + stored_token);
@@ -72,6 +74,8 @@ setTimeout(() => {
                 localStorage.setItem("email", content.email);
                 localStorage.setItem("token", content.token);
                 
+                expiration_time = content.expires;
+                
                 //set the email in the email field
                 document.getElementById("email").value = content.email;
                 
@@ -90,6 +94,7 @@ setTimeout(() => {
             case OpCode.RESUME_SUCCESS: {
                 //if the server sends a success message, set the email input to the one in localStorage
                 document.getElementById("email").value = localStorage.getItem("email");
+                expiration_time = content.expires;
                 return;
             }
             case OpCode.EMAIL_INCOMING: {
@@ -185,3 +190,9 @@ function toggleHTMLMode() {
 setTimeout(() => {
     document.getElementById("html_mode").checked = html_mode;
 }, 100);
+
+setInterval(() => {
+    //expiration_time is a unix timestamp
+    //get the minutes until expiration
+    document.getElementById("expires_container").innerText = String(Math.floor((expiration_time - Date.now()) / 60000));
+}, 1000);
