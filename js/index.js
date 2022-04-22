@@ -96,7 +96,7 @@ setTimeout(() => {
                 //if the server sends an email, alert the user
                 createEmailElement(content.data.from,
                     content.data.subject,
-                    html_mode ? content.data.html : content.data.body,
+                    html_mode ? content.data.html || content.data.body : content.data.body,
                     content.data.date,
                     content.data.html
                 );
@@ -156,7 +156,18 @@ function createEmailElement(sender, subject, body, date, html) {
     const email_display = document.createElement("div");
     email_display.className = "email_display";
     email_display.style.display = "none";
-    email_display.innerHTML = `<h5>Date received: ${new Date(date).toISOString()}</h5><p>${(html_mode ? stripTags(html) : noHTML(body))}</p>`;
+    email_display.innerHTML = `<h5>Date received: ${new Date(date).toISOString()}</h5>`;
+    //<p>${(html_mode ? stripTags(html) : noHTML(body))}</p>
+    //if html_mode, create an iframe with the html in it
+    if(html_mode) {
+        const iframe = document.createElement("iframe");
+        iframe.srcdoc = html;
+        iframe.style.width = "100%";
+        iframe.style.height = "100vh";
+        email_display.appendChild(iframe);
+    } else {
+        email_display.innerHTML += `<p>${noHTML(body)}</p>`;
+    }
     email.onclick = () => {
         email_display.style.display = "block";
         document.getElementById(String(date)).style.display = "none";
