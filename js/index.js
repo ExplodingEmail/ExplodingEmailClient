@@ -23,8 +23,12 @@ function stripTags(input) {
                 .replace(/<[\/\!]*?[^<>]*?>/gi, '')
                 .replace(/<style[^>]*>.*?<\/style>/gi, '')
                 .replace(/<![\s\S]*?--[ \t\n\r]*>/gi, '')
-                .replace(/<img[^>]*>/gi, '')
                 .replace(/<iframe[^>]*>/gi, '');
+}
+
+function noHTML(input) {
+    //remove all < and > replace with &lt; and &gt;
+    return input.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
 const URL_BASE = "wss://gateway.exploding.email";
@@ -153,7 +157,7 @@ function createEmailElement(sender, subject, body, date, html) {
     const email_display = document.createElement("div");
     email_display.className = "email_display";
     email_display.style.display = "none";
-    email_display.innerHTML = `<h5>Date received: ${new Date(date).toISOString()}</h5><p>${stripTags(html_mode ? html : body)}</p>`;
+    email_display.innerHTML = `<h5>Date received: ${new Date(date).toISOString()}</h5><p>${(html_mode ? stripTags(html) : noHTML(body))}</p>`;
     email.onclick = () => {
         email_display.style.display = "block";
         document.getElementById(String(date)).style.display = "none";
