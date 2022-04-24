@@ -194,5 +194,13 @@ setTimeout(() => {
 setInterval(() => {
     //expiration_time is a unix timestamp
     //get the minutes until expiration
-    document.getElementById("expires_container").innerText = String(Math.floor((expiration_time - Date.now()) / 60000));
+    
+    const exp = Math.floor((expiration_time - Date.now()) / 60000);
+    
+    if(exp <= 0) {
+        document.getElementById("expires_p").innerText = "Your inbox has expired.  To generate a new inbox, click the regenerate button.";
+    } else {
+        document.getElementById("expires_container").innerText = String(exp);
+    }
+    
 }, 1000);
