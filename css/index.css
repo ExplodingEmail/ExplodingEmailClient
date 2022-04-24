@@ -70,7 +70,7 @@ footer {
 }
 
 .email_entity {
-    
+    word-wrap: break-word;
 }
 
 .buttonable {
