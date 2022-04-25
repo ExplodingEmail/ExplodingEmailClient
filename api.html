@@ -14,6 +14,17 @@
     <meta name="twitter:card" content="summary_large_image">
     
     <link rel="stylesheet" href="/css/index.css">
+    
+    <style>
+        ul > li > ol > li {
+        /*    use square bullets*/
+            list-style-type: square;
+        }
+        
+        h1, h2, h3 {
+            font-size: x-large;
+        }
+    </style>
 </head>
 <body>
 <div class="topnav">
@@ -38,6 +49,7 @@
         <ol>
             <li><a href="#gateway-generate">Generate new email/token pair</a></li>
             <li><a href="#gateway-resume">Resume an email from a stored token</a></li>
+            <li><a href="#gateway-custom">Use a custom domain</a></li>
         </ol>
     </li>
     
@@ -58,6 +70,7 @@
             <li><a href="#opcodes-invalid-opcode">Invalid opcode</a></li>
             <li><a href="#opcodes-version">Version identifier</a></li>
             <li><a href="#opcodes-expired">Inbox Expired</a></li>
+            <li><a href="#opcodes-invalid-key">Invalid Key</a></li>
         </ol>
     </li>
     <li>
@@ -80,6 +93,7 @@
     Find bugs?  Report them to <a href="mailto:bugreport@exploding.email">bugreport@exploding.email</a><br>
     I'll try to answer your email as soon as possible (note, you will receive a response from dispatch@exploding.email).
 </p>
+<hr>
 <h2 id="gateway">Gateway</h2>
 <p>
     The gateway is how you interact with the API.  The gateway uses <a href="https://json.org">JSON</a> data to communicate with the API.
@@ -144,6 +158,30 @@
     At this point, you should generate a new email address.  The server may close an email before three hours (due
     to restarts, maintenance, etc.) email addresses are only stored in-memory.
 </p>
+<h3 id="gateway-custom">Use a custom domain</h3>
+<p>
+    To use a custom domain, we need to setup a few things first.
+    <br>
+    <p>Step one: generate a SECURE password, then use SHA512 to hash it.
+    <br>
+    <p>Step two: set the TXT record with name `exploding-email` and the content with your hashed password.
+    <br>
+    <p>Step three: connect to <code>wss://gateway.exploding.email/custom/[KEY]/[DOMAIN]</code>
+    <br><br>
+    <p>On success, you will receive the following (example):
+</p>
+<pre>
+    {
+        "email": "*@[DOMAIN]",
+        "token": "",
+        "expires": 1650933472210,
+        "op": 2
+    }
+</pre>
+<p>
+    See <a href="#opcodes-invalid-key">14 Invalid Key</a> and <a href="#opcodes-here-is-your-email-and-token">2 Here is your email and token</a> for more information.
+</p>
+<hr>
 <h2 id="opcodes">OpCodes</h2>
 <p>
     OpCodes are an easy way for your client to tell what the server is trying to send you, without having to parse the data or message.
@@ -187,6 +225,20 @@
     }
 </pre>
 <p>Clients should store this token in case of a disconnect.</p>
+<p>If you are connecting a custom domain, upon success you will receive:</p>
+<pre>
+    {
+        "email": "*@example.com",
+        "token": "",
+        "expires": 1650933472210,
+        "op": 2
+    }
+</pre>
+<p>
+    The <code>token</code> will always be an empty string, and the <code>email</code> will be the custom domain you are connecting to.
+    <p>Because of the way the server is structured, there is an expiration date.  Should you hit that date, you should reconnect.
+    <p>On failure, you will receive <a href="#opcodes-invalid-key">14 Invalid Key</a>.
+</p>
 <h3 id="opcodes-statistics-request-response">3: Statistics Response</h3>
 <p>
     This acts as a heartbeat as well as an update for statistics.<br>
@@ -332,6 +384,17 @@
     }
 </pre>
 <p>At this point, your resume token has also expired.</p>
+<h3 id="opcodes-invalid-key">14: Invalid Key</h3>
+<p>Received if the key is invalid.</p>
+<p>Example:</p>
+<pre>
+    {
+        "error": "Invalid key",
+        "op": 14,
+        "terminated": true
+    }
+</pre>
+<hr>
 <h2 id="examples">Examples</h2>
 <p>In TypeScript, you can use the following with the <a href="https://npmjs.com/package/ws">ws package</a>.</p>
 <pre>
