@@ -57,6 +57,7 @@
             <li><a href="#opcodes-delete-inbox">Delete inbox</a></li>
             <li><a href="#opcodes-invalid-opcode">Invalid opcode</a></li>
             <li><a href="#opcodes-version">Version identifier</a></li>
+            <li><a href="#opcodes-expired">Inbox Expired</a></li>
         </ol>
     </li>
     <li>
@@ -92,6 +93,7 @@
     {
         "email": "adsuoj055904@magicaljellyfish.com",
         "token": "ZLvEW1xaJH6ZsN4zxLDsEp_R5flqmpD5h3LjhucIKIyQv3GDbPunESrNP9veB-nFn9mCT0XxxgTWZlRq63vZSw",
+        "expires": 1650856585356,
         "op": 2
     }
 </pre>
@@ -114,7 +116,7 @@
 <h3 id="gateway-resume">Resume email address by token</h3>
 <p>
     Disconnects happen on the internet, and there's no way around that.<br>
-    You can use your stored token from the generated email address to resume.  Note: an inbox will be deleted after three days (259200 seconds).<br>
+    You can use your stored token from the generated email address to resume.  Note: an inbox will be deleted after three hours (10800 seconds).<br>
     At that point, the email address will be gone (basically) forever.<br>
     To resume, connect to <code>wss://gateway.exploding.email/auth/[YOUR_STORED_TOKEN_HERE]</code><br>
     Example response:
@@ -122,7 +124,8 @@
 <pre>
     {
         "email": "adsuoj055904@magicaljellyfish.com",
-        "op": 5
+        "op": 5,
+        "expires": 1650856585356
     }
 </pre>
 <p>
@@ -138,7 +141,7 @@
     }
 </pre>
 <p>
-    At this point, you should generate a new email address.  The server may close an email before three days (due
+    At this point, you should generate a new email address.  The server may close an email before three hours (due
     to restarts, maintenance, etc.) email addresses are only stored in-memory.
 </p>
 <h2 id="opcodes">OpCodes</h2>
@@ -179,6 +182,7 @@
     {
         "email": "adsuoj055904@magicaljellyfish.com",
         "token": "ZLvEW1xaJH6ZsN4zxLDsEp_R5flqmpD5h3LjhucIKIyQv3GDbPunESrNP9veB-nFn9mCT0XxxgTWZlRq63vZSw",
+        "expires": 1650856585356,
         "op": 2
     }
 </pre>
@@ -215,6 +219,7 @@
 <pre>
     {
         "email": "adsuoj055904@magicaljellyfish.com",
+        "expires": 1650856585356,
         "op": 5
     }
 </pre>
@@ -231,6 +236,7 @@
             "to": "adsuoj055904@magicaljellyfish.com",
             "subject": "Hello",
             "body": "body of the email",
+            "html": "html body of the email",
             "date": 1650314854488,
             "ip": "127.0.0.1"
         },
@@ -242,7 +248,8 @@
     <li><b>from</b> is who sent the email (note: there is no validation on our end)</li>
     <li><b>to</b> is your email address</li>
     <li><b>subject</b> is the email subject</li>
-    <li><b>body</b> is the body of the email (may be html)</li>
+    <li><b>body</b> is the body of the email</li>
+    <li><b>html</b> is the html body of the email</li>
     <li><b>date</b> is the unix timestamp of when the email was sent in milliseconds</li>
     <li><b>ip</b> is always 127.0.0.1 until further notice.</li>
 </ul>
@@ -305,7 +312,7 @@
         "terminated": true
     }
 </pre>
-<h3 id="opcodes-version">12: Version identifier</h3>
+<h3 id="opcodes-version">12: Version Identifier</h3>
 <p>The server will send its version on this OpCode to help identify potential issues with clients.</p>
 <p>The client should refuse connection if it is a major version off.</p>
 <p>Example:</p>
@@ -315,6 +322,16 @@
         "op": 12
     }
 </pre>
+<h3 id="opcodes-expired">13: Inbox Expired</h3>
+<p>Upon your inbox expiring, you will receive the following data:</p>
+<pre>
+    {
+        "terminated": true
+        "op": 13,
+        "message": "Inbox expired.",
+    }
+</pre>
+<p>At this point, your resume token has also expired.</p>
 <h2 id="examples">Examples</h2>
 <p>In TypeScript, you can use the following with the <a href="https://npmjs.com/package/ws">ws package</a>.</p>
 <pre>
@@ -330,7 +347,7 @@
             const json = JSON.parse(data);
             console.log(`You got an email!  From ${json.data.from}, subject: ${json.data.subject}`);
         }
-    })
+    });
 </pre>
 </body>
 </html>
