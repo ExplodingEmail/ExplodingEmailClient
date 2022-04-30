@@ -161,4 +161,8 @@ footer {
     .area {
         display: none;
     }
+    
+    .about {
+        width: 350px;
+    }
 }
