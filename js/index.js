@@ -162,6 +162,15 @@ function topnav_resize() {
     x.className = x.className === "" ? "responsive" : "";
 }
 
+function formatDate(timestamp) {
+    //format: "Day Name, Month Day, Year; Hour:Minute:Second"
+    //ex "Tuesday, May 5, 2020 at 12:00:00"
+    const date = new Date(timestamp);
+    const date_name = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const month_name = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+    return `${date_name[date.getDay()]}, ${month_name[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()} at ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+}
+
 function createEmailElement(sender, subject, body, date, html) {
     const email = document.createElement("div");
     email.className = "email_entity";
@@ -170,7 +179,7 @@ function createEmailElement(sender, subject, body, date, html) {
     const email_display = document.createElement("div");
     email_display.className = "email_display";
     email_display.style.display = "none";
-    email_display.innerHTML = `<h5>Date received: ${new Date(date).toISOString()}</h5>`;
+    email_display.innerHTML = `<h5>Date received: ${formatDate(date)}</h5>`;
     //<p>${(html_mode ? stripTags(html) : noHTML(body))}</p>
     //if html_mode, create an iframe with the html in it
     if(html_mode) {
