@@ -42,6 +42,7 @@ let stored_email = localStorage.getItem("email");
 
 let ws;
 
+let expired = false;
 let expiration_time = "(loading)";
 
 setTimeout(() => {
@@ -53,6 +54,14 @@ setTimeout(() => {
     
     ws.onopen = function() {
         console.log("Connected to server");
+    };
+    
+    ws.onclose = function() {
+        console.log("Disconnected from server");
+        //refresh the page unless the session has expired
+        if(!expired) {
+            location.reload();
+        }
     };
     
     ws.onmessage = function(event) {
@@ -199,6 +208,7 @@ setInterval(() => {
     
     if(exp <= 0) {
         document.getElementById("expires_p").innerText = "Your inbox has expired.  To generate a new inbox, click the regenerate button.";
+        expired = true;
     } else {
         document.getElementById("expires_container").innerText = String(exp);
     }
