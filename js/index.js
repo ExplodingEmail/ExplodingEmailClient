@@ -126,14 +126,17 @@ function copy() {
     email.select();
     email.setSelectionRange(0, 99999);
     
-    navigator.clipboard.writeText(email.value);
-    
-    //change the `copy_button` text to a checkmark for 3 seconds
-    const copy_button = document.getElementById("copy_button");
-    copy_button.innerHTML = "✓ Copied!";
-    setTimeout(function() {
-        copy_button.innerHTML = "Copy";
-    }, 3000);
+    navigator.clipboard.writeText(email.value).then(r => {
+        //change the `copy_button` text to a checkmark for 3 seconds
+        const copy_button = document.getElementById("copy_button");
+        copy_button.innerHTML = "✓ Copied!";
+        setTimeout(function() {
+            copy_button.innerHTML = "Copy";
+        }, 3000);
+    }).catch(() => {
+        //if the copy fails, alert the user
+        alert("Failed to copy email to clipboard.");
+    });
 }
 
 function regenerate() {
