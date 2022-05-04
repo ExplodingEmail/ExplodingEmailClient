@@ -161,7 +161,7 @@ setTimeout(() => {
 
 
 function topnav_resize() {
-    const x = document.getElementById("topnav");
+    const x = document.getElementsByClassName("topnav")[0];
     x.className = x.className === "" ? "responsive" : "";
 }
 
