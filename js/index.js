@@ -162,7 +162,7 @@ setTimeout(() => {
 
 function topnav_resize() {
     const x = document.getElementsByClassName("topnav")[0];
-    x.className = x.className === "" ? "responsive" : "";
+    x.classList.toggle("responsive");
 }
 
 function formatDate(timestamp) {
