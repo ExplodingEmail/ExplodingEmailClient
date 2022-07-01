@@ -151,15 +151,6 @@ function regenerate() {
     
 }
 
-setTimeout(() => {
-    const ua = navigator.userAgent.toLowerCase();
-    
-    if(ua.includes("iphone") || ua.includes("ipad") || ua.includes("ipod") || ua.includes("android")) {
-        document.getElementById("mobile_warning").hidden = false;
-    }
-}, 1000);
-
-
 function topnav_resize() {
     const x = document.getElementsByClassName("topnav")[0];
     x.classList.toggle("responsive");

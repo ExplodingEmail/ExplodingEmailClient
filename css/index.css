@@ -140,10 +140,18 @@ footer {
     }
 }
 
+#mobile_warning {
+    display: none;
+}
+
 /*general mobile*/
 @media only screen and (max-width: 950px) {
     .buttonable {
         width: 80%;
+    }
+    
+    #mobile_warning {
+        display: block;
     }
     
     .container {
