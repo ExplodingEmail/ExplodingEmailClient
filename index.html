@@ -1,120 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta http-equiv="Refresh" content="0; url='https://www.w3docs.com'" />
     <meta charset="UTF-8">
-    <title>ExplodingEmail - Temporary Email Service</title>
-    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Generate temporary/disposable email addresses to use for other websites!">
-    <meta property="og:title" content="ExplodingEmail" />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://exploding.email/" />
-    <meta property="og:image" content="https://exploding.email/logo.png" />
-    <meta property="og:description" content="Generate temporary email addresses to reduce spam!" />
-    
-<!--    <meta name="apple-itunes-app" content="app-id=myAppStoreID, app-argument=myURL">-->
-    
-    <meta name="twitter:card" content="summary_large_image">
-    
-    <script src="/js/index.js"></script>
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&amp;display=swap" rel="stylesheet">
-    
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
-    
-    <link rel="stylesheet" href="/css/index.css">
-    <link rel="stylesheet" href="/css/circles.css">
-    <link rel="stylesheet" href="/css/slider.css">
+    <title>Redirecting...</title>
 </head>
 <body>
-<div class="topnav">
-    <a href="/" class="active">Home</a>
-    <!--<a href="/news.html">News</a>-->
-    <a href="/contact.html">Contact</a>
-    <a href="/no-cookies.html">NoCookie</a>
-    <a href="/api.html">API</a>
-    <a href="https://github.com/ExplodingEmail">GitHub</a>
-    <a href="https://discord.gg/GHapeHPWVS">Discord</a>
-    <a href="javascript:void(0);" class="icon" onclick="topnav_resize()">
-        =
-    </a>
-</div>
-<div class="container">
-    <h1>Exploding Email</h1>
-    <h2 class="slogan">Generate disposable email addresses to use on websites!</h2>
-    <h3>NEW: try our newly designed website, <a href="https://tempmail.lol">tempmail.lol</a>!</h3>
-    <p>We will still serve this website, but the new one has a better design.</p>
-    
-    <noscript>
-        <h1>Please enable JavaScript to use this website</h1>
-    </noscript>
-    
-    <p>We've processed <b id="stats">(loading)</b> emails with <b id="inboxes">(loading)</b> active inboxes!</p>
-    
-    <h2 id="mobile_warning">
-        For mobile users, please use our new site: <a href="https://tempmail.lol/">tempmail.lol</a>, which
-        has much higher compatibility with mobile devices.
-    </h2>
-    
-    <!--curved and dotted box-->
-    <label for="email" class="email_label">Your disposable email address is:</label><br><br>
-    <input id="email" class="email" readonly>
-    <br>
-    <p id="expires_p">Expires in <b class="expires_container" id="expires_container">(loading)</b> minutes</p>
-    <br>
-    
-    <!--copy button-->
-    <button id="copy_button" class="buttonable" onclick="copy()">Copy</button>
-    <!--regenerate button-->
-    <button id="regenerate_button" class="buttonable" onclick="regenerate()">Regenerate</button>
-    
-    <!--curved wheat colored box used for containing emails which can be clicked on to reveal the body which will have an email_display appended to it by the js-->
-    <h2 class="emails_will_show_up_here">Emails will show up below</h2>
-    <p>HTML mode <a href="/html-mode.html">may reduce privacy</a>:</p>
-    <label class="switch">
-        <input type="checkbox" id="html_mode" onclick="toggleHTMLMode();">
-        <span class="slider round"></span>
-    </label>
-    <br><br>
-    <div class="emails_container" id="emails_container"></div>
-    <br><br><br><br><br><br><br><br><br><br><br><br>
-    <div class="about">
-        <h2>What is ExplodingEmail?</h2>
-        <p>
-            ExplodingEmail, otherwise known as a disposable email generator, is a website which generates disposable email addresses to use on websites.
-            A lot of websites which require you to sign up for an account to use certain features, require you to use an email address,
-            and some of them require you to verify it.  In a world of spam, low security, and non-privacy, this is a problem.  This website is designed to
-            solve this problem by generating disposable email addresses which can be used on websites without you having to give up your real email address.<br><br>
-            This is also safer than using an email dedicated for potential spam websites, as you can generate one email per-website, making it so multiple
-            companies cannot build a profile on you based on your email address.  While it might sound difficult to track a user based on an email address,
-            <a href="https://nothingprivate.ml/" rel="noreferrer">it is not only possible</a>, but non-trivial, to track based on elements such as user agents, IP addresses,
-            and other browser features.<br><br>
-            ExplodingEmail does not keep <b>ANY</b> logs on your emails.  As proof of this, when an email is received on our end and sent to you, it is instantly
-            erased from our servers.  This also means that if you are not on the webpage while you receive an email, it will be erased as well.  In a world
-            where privacy is decaying, every little bit counts to reclaim it.<br><br>
-            <b>Want to check if one of your email addresses has been part of a breach?</b>
-            <a href="https://haveibeenpwned.com/" rel="noreferrer">Have I Been Pwned</a> is a website which checks if an email address has been part of a breach.
-            <br>Using your email/password from the pwned website, hackers can try your credentials on other websites if you re-use the same password
-            (this is why using the same password on different websites is a bad idea).  Using ExplodingEmail for websites that you do not want to give your real
-            email to will help prevent this, as that email will not be associated with any other website.<br><br>
-            Using ExplodingEmail will also prevent sketchy websites from being able to sell your email to spammers.  If an ExplodingEmail email address is
-            sold to spammers, they will be spamming an inbox where no one will read the message.
-        </p>
-    </div>
-</div>
-
-<div class="area">
-    <ul class="circles">
-        <li></li><li></li><li></li><li></li><li></li>
-        <li></li><li></li><li></li><li></li><li></li>
-        <li></li>
-    </ul>
-</div>
-<sub>Made with <3 by <a href="https://github.com/alexanderepolite">Alexander Epolite</a></sub>
+    <p>Redirecting...</p>
+    <a href="https://tempmail.lol">Click here if you are not redirected.</a>
 </body>
-<footer>
-    <br>
-</footer>
 </html>
